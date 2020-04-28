@@ -71,7 +71,7 @@ class Upload extends Component {
        const copy = { ...this.state.uploadProgress };
        copy[file.name] = {
         state: "pending",
-        percentage: (event.loaded / event.total) * 100
+        percentage: Math.round((event.loaded / event.total) * 100)
        };
        this.setState({ uploadProgress: copy });
       }
