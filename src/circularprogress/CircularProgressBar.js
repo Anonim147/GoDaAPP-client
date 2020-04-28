@@ -49,6 +49,14 @@ class CircularProgressBar extends Component {
               textAnchor="middle">
               {this.props.percentage}%
             </text>
+            <text
+              className="circle-text-small"
+              x="50%"
+              y="60%"
+              dy=".3em"
+              textAnchor="middle">
+              xxxxxx
+            </text>
         </svg>
       );
     }
