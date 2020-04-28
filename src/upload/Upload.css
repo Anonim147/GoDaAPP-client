@@ -37,6 +37,14 @@
     color: #555;
   }
 
+  .FilenameContainer{
+    width: 50%;
+  }
+
+  .ProgresContainer{
+    width: 50;    
+  }
+
   .Filename {
     margin-bottom: 8px;
     font-size: 16px;
@@ -46,17 +54,15 @@
   .Row {
     display: flex;
     flex: 1;
-    flex-direction: column;
     justify-content: space-between;
-    height: 60px;
-    padding: 8px;
-    overflow: hidden;
     box-sizing: border-box;
   }
 
   .CheckIcon {
     opacity: 0.5;
     margin-left: 32px;
+    width: 24px;
+    height: 24px;
   }
   
   .ProgressWrapper {

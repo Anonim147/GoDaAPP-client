@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './Upload.css'
 import Dropzone from '../dropzone/Dropzone'
-import Progress from '../progress/Progress'
+import CircularProgressBar from '../circularprogress/CircularProgressBar'
 
 class Upload extends Component {
   constructor(props) {
@@ -10,6 +10,7 @@ class Upload extends Component {
         files: [],
         uploading: false,
         uploadProgress: {},
+        canUpload: true,
         successfullUploaded: false
       };
   
@@ -20,37 +21,30 @@ class Upload extends Component {
     }
   
   onFilesAdded(files) {
-  this.setState(prevState => ({
-      files: prevState.files.concat(files)
+  this.setState(() => ({
+      //files: prevState.files.concat(files)
+      files: [files]
   }));
   }
 
   renderProgress(file) {
     const uploadProgress = this.state.uploadProgress[file.name];
-    if (this.state.uploading || this.state.successfullUploaded) {
       return (
-        <div className="ProgressWrapper">
-          <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
-          <img
-            className="CheckIcon"
-            alt="done"
-            src="baseline-check_circle_outline-24px.svg"
-            style={{
-              opacity:
-                uploadProgress && uploadProgress.state === "done" ? 0.5 : 0
-            }}
-          />
+        <div className="ProgressContainer">
+        <CircularProgressBar
+            strokeWidth="2"
+            sqSize="200"
+            percentage={uploadProgress ? uploadProgress.percentage : 0}/>
         </div>
       );
-    }
   }
 
   renderActions() {
-    if (this.state.successfullUploaded) {
+    if (!this.state.canUpload) {
       return (
         <button className = "upload_button"
           onClick={() =>
-            this.setState({ files: [], successfullUploaded: false })
+            this.setState({ files: [], successfullUploaded: false, canUpload: true })
           }
         >
           Clear
@@ -59,7 +53,7 @@ class Upload extends Component {
     } else {
       return (
         <button className = "upload_button"
-          disabled={this.state.files.length < 0 || this.state.uploading}
+          disabled={this.state.files.length <= 0 || this.state.uploading}
           onClick={this.uploadFiles}
         >
           Upload
@@ -102,7 +96,7 @@ class Upload extends Component {
      formData.append("file", file, file.name);
      console.log(formData);
    
-     req.open("POST", "http://localhost:9000/upload");
+     req.open("POST", "http://localhost:9000/api/upload");
      req.send(formData);
     });
    }
@@ -116,10 +110,11 @@ class Upload extends Component {
     try {
       await Promise.all(promises);
   
-      this.setState({ successfullUploaded: true, uploading: false });
+      this.setState({ successfullUploaded: true, uploading: false, canUpload: false });
     } catch (e) {
       // Not Production ready! Do some error handling here instead...
-      this.setState({ successfullUploaded: true, uploading: false });
+      console.log("catched err")
+      this.setState({ successfullUploaded: false, uploading: false, canUpload: false });
     }
   }
 
@@ -135,14 +130,17 @@ class Upload extends Component {
               />
             </div>
             <div className="Files">
-              {this.state.files.map(file => {
-                return (
-                  <div key={file.name} className="Row">
-                    <span className="Filename">{file.name}</span>
-                    {this.renderProgress(file)} 
-                  </div>
-                );
-              })}
+              { this.state.files.map(file => {   /* TO DO: write norm handling */
+                  return (
+                    <div key={file.name} className="Row">
+                      <div className="FilenameContainer">
+                      <span className="Filename">{file.name}</span>
+                      </div>
+                      {this.renderProgress(file)} 
+                    </div>
+                  );
+                })
+               }
             </div>
           </div>
           <div className="Actions">{this.renderActions()}</div>

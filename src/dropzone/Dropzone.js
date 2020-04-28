@@ -54,7 +54,7 @@ class Dropzone extends Component {
     for (var i = 0; i < list.length; i++) {
       array.push(list.item(i));
     }
-    return array;
+    return array[0];
   }
 
   render() {
