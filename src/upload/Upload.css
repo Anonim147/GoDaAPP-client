@@ -6,20 +6,29 @@
     text-align: left;
     overflow: hidden;
   }
+
+  .DropzoneContainer {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+  }
   
   .Content {
     display: flex;
+    justify-content: center;
+    flex:1 2;
     flex-direction: row;
     padding-top: 16px;
     box-sizing: border-box;
     width: 100%;
   }
   
+
   .Files {
     margin-left: 32px;
     align-items: flex-start;
     justify-items: flex-start;
-    flex: 1;
+    flex: 2;
     overflow-y: auto;
   }
   
@@ -38,7 +47,9 @@
   }
 
   .FilenameContainer{
-    width: 50%;
+    width: 40%;
+    display: flex;
+    justify-content:flex-start;
   }
 
   .ProgresContainer{
@@ -53,8 +64,8 @@
   
   .Row {
     display: flex;
-    flex: 1;
-    justify-content: space-between;
+    flex: 2;
+    justify-content: center;
     box-sizing: border-box;
   }
 

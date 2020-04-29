@@ -19,7 +19,7 @@ class CircularProgressBar extends Component {
       const dashOffset = dashArray - dashArray * this.props.percentage / 100;
   
       return (
-        <svg
+        <svg 
             width={this.props.sqSize}
             height={this.props.sqSize}
             viewBox={viewBox}>
@@ -52,10 +52,10 @@ class CircularProgressBar extends Component {
             <text
               className="circle-text-small"
               x="50%"
-              y="60%"
+              y="63%"
               dy=".3em"
               textAnchor="middle">
-              xxxxxx
+              {this.props.status}
             </text>
         </svg>
       );
@@ -64,8 +64,9 @@ class CircularProgressBar extends Component {
   
   CircularProgressBar.defaultProps = {
     sqSize: 200,
-    percentage: 25,
-    strokeWidth: 10
+    percentage: 0,
+    strokeWidth: 10,
+    status: "ready"
   };
   
   export default CircularProgressBar;

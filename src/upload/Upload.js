@@ -15,7 +15,6 @@ class Upload extends Component {
       };
   
       this.onFilesAdded = this.onFilesAdded.bind(this);
-      this.uploadFiles = this.uploadFiles.bind(this);
       this.sendRequest = this.sendRequest.bind(this);
       this.renderActions = this.renderActions.bind(this);
     }
@@ -34,6 +33,7 @@ class Upload extends Component {
         <CircularProgressBar
             strokeWidth="2"
             sqSize="200"
+            status={uploadProgress ? uploadProgress.state : "ready" }
             percentage={uploadProgress ? uploadProgress.percentage : 0}/>
         </div>
       );
@@ -54,7 +54,7 @@ class Upload extends Component {
       return (
         <button className = "upload_button"
           disabled={this.state.files.length <= 0 || this.state.uploading}
-          onClick={this.uploadFiles}
+          onClick={this.sendRequest}
         >
           Upload
         </button>
@@ -62,10 +62,13 @@ class Upload extends Component {
     }
   }
 
-  sendRequest(file) {
-    return new Promise((resolve, reject) => {
+async sendRequest() {
+    var file = this.state.files[0]
+    this.setState({ uploadProgress: {}, uploading: true });
+
+    var p = new Promise((resolve, reject) => {
      const req = new XMLHttpRequest();
-   
+     req.responseType = 'json';
      req.upload.addEventListener("progress", event => {
       if (event.lengthComputable) {
        const copy = { ...this.state.uploadProgress };
@@ -81,7 +84,8 @@ class Upload extends Component {
       const copy = { ...this.state.uploadProgress };
       copy[file.name] = { state: "done", percentage: 100 };
       this.setState({ uploadProgress: copy });
-      resolve(req.response);
+      console.log(req.readyState)
+      //resolve(req.response);
      });
       
      req.upload.addEventListener("error", event => {
@@ -90,40 +94,35 @@ class Upload extends Component {
       this.setState({ uploadProgress: copy });
       reject(req.response);
      });
+
+     req.onreadystatechange = function () {
+       if (req.readyState === 4 ) {
+         req.response ? resolve(req.response) : reject(req.response)
+       }
+     }
    
      const formData = new FormData();
-     console.log(file);
      formData.append("file", file, file.name);
-     console.log(formData);
    
      req.open("POST", "http://localhost:9000/api/upload");
      req.send(formData);
     });
-   }
 
-  async uploadFiles() {
-    this.setState({ uploadProgress: {}, uploading: true });
-    const promises = [];
-    this.state.files.forEach(file => {
-      promises.push(this.sendRequest(file));
-    });
-    try {
-      await Promise.all(promises);
-  
-      this.setState({ successfullUploaded: true, uploading: false, canUpload: false });
-    } catch (e) {
-      // Not Production ready! Do some error handling here instead...
-      console.log("catched err")
-      this.setState({ successfullUploaded: false, uploading: false, canUpload: false });
-    }
-  }
+    p.then(
+      function(res){
+        this.setState({ successfullUploaded: true, uploading: false, canUpload: false });
+        //TO DO: norm handler here
+      }.bind(this), function(reason){
+        this.setState({ successfullUploaded: false, uploading: false, canUpload: false });
+      }.bind(this))
+   }
 
   render() {
       return (
         <div className="Upload">
           <span className="Title">Select file or drop it on uploading zone to upload</span>
           <div className="Content">
-            <div>
+            <div className="DropzoneContainer">
               <Dropzone
                 onFilesAdded={this.onFilesAdded}
                 disabled={this.state.uploading || this.state.successfullUploaded}
