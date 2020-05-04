@@ -63,19 +63,6 @@
     font-family: Roboto;
     text-transform: uppercase;
   }
-
-  .DropIcon{
-    width: 160px;
-    height: 160px;
-    opacity: 0.9;
-  }
-
-  .CheckIcon {
-    opacity: 0.5;
-    margin-left: 32px;
-    width: 24px;
-    height: 24px;
-  }
   
   .ProgressWrapper {
     display: flex;
@@ -84,35 +71,37 @@
     align-items: center;
   }
   
- 
-
-  .upload_button, .CancelButton {
+  .UploadButton, .CancelButton {
     font-family: 'Roboto medium', sans-serif;
     font-size: 14px;
     height: 36px;
-    width: 50%;
+    margin: 0% 0.5% 0% 0;
+    width: 49.5%;
     padding: 6px 16px;
     line-height: 1.42857143;
     text-align: center;
-    white-space: nowrap;
     vertical-align: middle;
-    -ms-touch-action: manipulation;
     touch-action: manipulation;
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 0;
+    border: 2px solid black;
     border-radius: 2px;
     background: #000;
     color: #fff;
     outline: 0;
   }
+
+  .UploadButton:hover, .CancelButton:hover {
+    background-color: white;
+    color: black;
+    transition: background-color 0.5s ease;
+  }
   
-  .upload_button:disabled, .CancelButton:disabled {
+  .UploadButton:disabled, .CancelButton:disabled {
+    color: white;
+    border-color: rgb(189, 189, 189);
     background: rgb(189, 189, 189);
     cursor: default;
+
   }
 
   .FilenameContainer, .LoaderContainer, .ResultContainer{
@@ -121,6 +110,7 @@
     flex-direction: column;
     justify-content:center;
   }
+
   .LoaderContainer, .ResultContainer{
     display: flex;
     justify-content: center;
@@ -129,26 +119,16 @@
     font-size: 16px;
   }
 
-  .LoaderContainer>div{
-    display: flex;
-    justify-content: center;
-  }
-
   .LoaderContainer>div>div.spinner-border{
     width: 120px;
     height: 120px;
-  }
-
-  .ImportResultIcon{
-    height: 150px;
-    width: auto;
   }
 
   .Filename {
     text-overflow: clip;
     margin-bottom: 8px;
     font-size: 16px;
-    color: #555;
+    color: rgb(59, 59, 59);
     text-align: center;
   }
 
@@ -196,6 +176,24 @@
     font-family: Roboto;
     color: black;
     font-size: 13px;
+  }
+
+  .DropIcon{
+    width: 160px;
+    height: 160px;
+    opacity: 0.9;
+  }
+
+  .CheckIcon {
+    opacity: 0.5;
+    margin-left: 32px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .ImportResultIcon{
+    height: 150px;
+    width: auto;
   }
 
   *:focus {

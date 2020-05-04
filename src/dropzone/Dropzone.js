@@ -14,11 +14,11 @@ class Dropzone extends Component {
     this.onDrop = this.onDrop.bind(this);
   }
 
-  openFileDialog() {
+  openFileDialog(evt) {
     if (this.props.disabled) return;
+    evt.target.value = "";
     this.fileInputRef.current.click();
   }
-
 
   onFilesAdded(evt) {
     if (this.props.disabled) return;
@@ -33,8 +33,6 @@ class Dropzone extends Component {
       }
     }
   }
-
-
 
   onDragOver(event) {
     event.preventDefault();

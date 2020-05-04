@@ -116,12 +116,21 @@ class Upload extends Component {
   }
 
   async getableNames() {
-    const response = await fetch('http://localhost:9000/api/get_table_list');
-    const data = await response.json();
-    if (data && data.tables)
-    { 
-      this.setState({existedTables:data.tables});
-    }
+    await fetch('http://localhost:9000/api/get_table_list').then(
+      async response => {        
+        if (!response.ok){
+            const error = response.text || response.status
+            return Promise.reject(error);
+        }
+        const data = await response.json();
+        if (data && data.tables){ 
+          this.setState({existedTables:data.tables});
+        }
+      }
+    ).catch(error => {
+        this.setState({existedTables:[]});
+        console.log(`Error getting tablenames: ${error.message}`)
+    });
   }
 
   async insertTable(url, data) { 
@@ -134,12 +143,11 @@ class Upload extends Component {
     };
     await fetch(url, requestOptions)
           .then(async response => {
-              const respData = await response.json();
-              console.log(respData);
               if (!response.ok) {
                   const error = response.text || response.status;
                   return Promise.reject(error);
               }
+              const respData = await response.json();
               this.setState({importing: false, importStatus:respData.value, importFinished: true, successfullImport: respData.success })
               console.log("good \n" + respData)
           })
@@ -301,10 +309,10 @@ class Upload extends Component {
     return(
       <div className="ButtonContainer">
         {this.state.filepath ?
-          <button className = "upload_button"
+          <button className = "UploadButton"
               disabled={this.state.textErr || this.state.importing || this.state.importFinished}
               onClick={this.startImportTable}>Import/Update</button>
-          : <button className = "upload_button"
+          : <button className = "UploadButton"
             disabled={this.state.files.length <= 0 || this.state.uploading}
             onClick={this.sendRequest}>
             Upload

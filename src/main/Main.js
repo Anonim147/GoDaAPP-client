@@ -16,31 +16,31 @@ class Main extends Component {
               <Col sm={3}>
                 <Nav variant="pills" className="flex-column">
                   <Nav.Item>
-                    <Nav.Link eventKey="first">Import Json</Nav.Link>
+                    <Nav.Link eventKey="import">Import Data</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="second">Update Table</Nav.Link>
+                    <Nav.Link eventKey="select">Select Data</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="third">Select Data</Nav.Link>
+                    <Nav.Link eventKey="merge">Merge Data</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="four">MergeData</Nav.Link>
+                    <Nav.Link eventKey="manage">Manage Tables</Nav.Link>
                   </Nav.Item>
                 </Nav>
               </Col>
               <Col sm={9}>
                 <Tab.Content>
-                  <Tab.Pane props={{ transition:"false" }} eventKey="first">
+                  <Tab.Pane eventKey="import">
                     <Upload />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="second">
+                  <Tab.Pane eventKey="select">
                     <div>tab 2</div>
                   </Tab.Pane>
-                  <Tab.Pane eventKey="third">
+                  <Tab.Pane eventKey="merge">
                     <div>tab 3</div>
                   </Tab.Pane>
-                  <Tab.Pane eventKey="four">
+                  <Tab.Pane eventKey="manage">
                     <div>tab 4</div>
                   </Tab.Pane>
                 </Tab.Content>

@@ -6,10 +6,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/*<div className="Card">*/}
-          {/*<Upload />*/}
           <Main />
-        {/*</div>*/}
       </div>
     )
   }
