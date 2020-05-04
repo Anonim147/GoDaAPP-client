@@ -24,3 +24,8 @@
   .FileInput {
     display: none;
   }
+
+  .UploadSpan{
+    font-family: Roboto;
+    text-transform: uppercase;
+  }

@@ -19,14 +19,22 @@ class Dropzone extends Component {
     this.fileInputRef.current.click();
   }
 
+
   onFilesAdded(evt) {
     if (this.props.disabled) return;
     const files = evt.target.files;
     if (this.props.onFilesAdded) {
-      const array = this.fileListToArray(files);
-      this.props.onFilesAdded(array);
+      if (files.length === 0) {
+        this.props.onFilesAdded(null)
+      }
+      else {
+        const array = this.fileListToArray(files);
+        this.props.onFilesAdded(array);
+      }
     }
   }
+
+
 
   onDragOver(event) {
     event.preventDefault();
@@ -79,7 +87,7 @@ class Dropzone extends Component {
           className="Icon"
           src="baseline-cloud_upload-24px.svg"
         />
-        <span>Upload Files</span>
+        <span className="UpladSpan">UPLOAD FILES</span>
       </div>
     );
   }
