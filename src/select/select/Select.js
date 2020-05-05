@@ -36,6 +36,7 @@ class Select extends Component {
             <div className="Header">
                 <p>Select table:</p>
                 {this.renderTableNames()}
+                <button className="ColumnButton">Get columns!</button>
             </div>
         )
     }
