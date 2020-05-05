@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './Upload.css'
 import Dropzone from '../dropzone/Dropzone'
+import CustomSelect from '../../common/cusomselect/CustomSelect'
 import CircularProgressBar from '../circularprogress/CircularProgressBar'
 import  { Spinner } from 'react-bootstrap';
 
@@ -26,7 +27,7 @@ class Upload extends Component {
       this.baseState = this.state;
   
       this.onFilesAdded = this.onFilesAdded.bind(this);
-      this.sendRequest = this.sendRequest.bind(this);
+      this.uploadFile = this.uploadFile.bind(this);
       this.renderActions = this.renderActions.bind(this);
       this.toogleButton = this.toogleButton.bind(this);
       this.geexistedtables = this.getableNames.bind(this);
@@ -157,7 +158,7 @@ class Upload extends Component {
           });
   }
   
-  async sendRequest() {
+  async uploadFile() {
       var file = this.state.files[0]
       this.setState({ uploadProgress: {}, uploading: true });
   
@@ -222,14 +223,7 @@ class Upload extends Component {
       <div>
       { !this.state.existedTables ? 
         <Spinner animation="border" />
-        : <select className="TableSelect" onChange={this.getUpdateValue}>
-            <option key="none">none</option>
-            {this.state.existedTables.map((item)=>{
-              return(
-              <option key={item}>{item}</option>
-              )
-            })}
-          </select>
+        : <CustomSelect selectId="tableSelect" data={this.state.existedTables} onChangeCallback={this.getUpdateValue}/>
       }
       </div>
     )
@@ -314,7 +308,7 @@ class Upload extends Component {
               onClick={this.startImportTable}>Import/Update</button>
           : <button className = "UploadButton"
             disabled={this.state.files.length <= 0 || this.state.uploading}
-            onClick={this.sendRequest}>
+            onClick={this.uploadFile}>
             Upload
           </button>
         }

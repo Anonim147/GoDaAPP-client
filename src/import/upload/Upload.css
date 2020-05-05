@@ -162,13 +162,9 @@
     height: 27px;
   }
 
-  .TableSelect {
-    font-family: Roboto;
+  #tableSelect {
     width: 94%;
     margin: 0% 1% 0% 1%;
-    height: 27px;
-    border-radius: 2px;
-    border: 1px solid black;
   }
 
   .TextErr{

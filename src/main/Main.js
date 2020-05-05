@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Main.css'
-import Upload from '../upload/Upload'
+import Upload from '../import/upload/Upload'
+import Select from '../select/select/Select';
 import  { Tab, Row, Col, Nav } from 'react-bootstrap';
 
 
@@ -11,12 +12,12 @@ class Main extends Component {
             <div className="header">
                 <h1>GoDAPP</h1>
             </div>
-            <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+            <Tab.Container id="left-tabs-example" defaultActiveKey="select">
             <Row>
               <Col sm={3}>
                 <Nav variant="pills" className="flex-column">
                   <Nav.Item>
-                    <Nav.Link eventKey="import">Import Data</Nav.Link>
+                    <Nav.Link eventKey="import">Upload Data</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="select">Select Data</Nav.Link>
@@ -35,7 +36,7 @@ class Main extends Component {
                     <Upload />
                   </Tab.Pane>
                   <Tab.Pane eventKey="select">
-                    <div>tab 2</div>
+                    <Select />
                   </Tab.Pane>
                   <Tab.Pane eventKey="merge">
                     <div>tab 3</div>
