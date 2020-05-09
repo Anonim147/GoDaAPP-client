@@ -1,10 +1,34 @@
-.Header{
+.Header>p{
+    text-align: center;
+    margin: 2px;
+}
+
+.Header>div{
+    flex: 0 1 100%;
     display: flex;
+    justify-content: center;
+}
+.Header>div>div{
+    flex: 0 1 100%;
+    flex-grow: 1;
+    padding: 0 2% 0% 2%;
+}
+
+#TargetTableSelect{
+    width: 100%;
+}
+
+.Error{
+    text-align: center;
+    color: red;
+    font-family: Roboto;
+    font-size: 15px;
 }
 
 .ColumnButton{
     font-family: Roboto;
-    width: 50%;
+    width: 48%;
+    margin: 0% 1% 0% 1%;
     height: 27px;
     border-radius: 1px;
     color: white;
@@ -19,4 +43,26 @@
 .ColumnButton:hover{
     color: black;
     background-color: white;
+}
+
+.ColumnButton:disabled{
+    color: white;
+    border-color: rgb(189, 189, 189);
+    background: rgb(189, 189, 189);
+    cursor: default;
+}
+
+.SelectContainer>div.spinner-border{
+    height: 27px;
+    width: 27px;
+}
+
+.KeysContainer {
+    display: flex;
+    padding: 1%;
+    flex-direction: column;
+}
+
+.KeysContainer>div{
+    margin: 0% 1% 0% 1%;
 }
