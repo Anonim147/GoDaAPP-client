@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './Select.css'
 import CustomSelect from '../../common/cusomselect/CustomSelect'
-import CustomCheckbox from '../../common/customcheckbox/CustomCheckbox'
 import  { Spinner } from 'react-bootstrap';
+import KeyItem from '../keyitem/KeyItem';
 
 class Select extends Component {
     constructor(props){
@@ -12,7 +12,9 @@ class Select extends Component {
           targetTable: null,
           tableKeys:null,
           err: null,
-          colErr: null
+          colErr: null,
+          columns: [],
+          filters: []
         };
 
         this.getTables = this.getTables.bind(this);
@@ -21,6 +23,7 @@ class Select extends Component {
         this.renderTableNames = this.renderTableNames.bind(this);
         this.renderHeader = this.renderHeader.bind(this);
         this.updateTables = this.updateTables.bind(this);
+        this.addOrRemoveColumn = this.addOrRemoveColumn.bind(this);
     }
 
     getInputValue(evt) {
@@ -33,9 +36,14 @@ class Select extends Component {
     }
 
     addOrRemoveColumn(evt){
-      console.log(evt.target.name)
-      console.log(evt.target.getAttribute("element"))
-      console.log(evt.target.checked)
+      var allcolumns = this.state.columns;
+      if (evt.target.checked){
+        allcolumns.push(evt.target.value);
+      }
+      if (!evt.target.checked){
+        allcolumns = allcolumns.filter((item) => {return item !== evt.target.value}); 
+      }
+      this.setState({columns:allcolumns});
     }
 
     updateTables(){
@@ -124,11 +132,18 @@ class Select extends Component {
           { this.state.tableKeys 
             ? this.state.tableKeys.map((item, index) => {
                 return(
-                  <CustomCheckbox
-                    key={index}
-                    name={`${item.keyname}(${item.keytype})`}
-                    handler={this.addOrRemoveColumn}
-                  />)})
+                  <KeyItem 
+                  key={index} 
+                  keyname={item.keyname}
+                  keytype={item.keytype}
+                  activeFilter={false}
+                  onCheckbox={this.addOrRemoveColumn}
+                  onFilterChange={this.addOrRemoveColumn}
+                  onValueChange={this.addOrRemoveColumn}
+                  onToogleFilter={this.addOrRemoveColumn}
+                  onChangeLogicalType={this.addOrRemoveColumn}
+                  />
+                  )})
             : this.renderErr(this.state.err)
           }
         </div>

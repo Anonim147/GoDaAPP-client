@@ -8,8 +8,7 @@ class CustomCheckbox extends Component{
             <input 
                 className="CustomCheckbox"
                 type="checkbox" 
-                key={this.props.name}
-                element={this.props.name} 
+                value={this.props.itemkey} 
                 name={this.props.name}
                 onChange={this.props.handler}
             />
