@@ -14,6 +14,7 @@ class KeyItem extends Component{
             logicalType:"OR",
             err: null
         };
+
         this.baseState = this.state;
         this.enableFilter = this.enableFilter.bind(this);
         this.updateValue = this.updateValue.bind(this);
@@ -23,11 +24,27 @@ class KeyItem extends Component{
         this.disableFilter = this.disableFilter.bind(this);
     }
 
+    enableFilter(evt){
+        evt.preventDefault();      
+        if(!this.props.addDisabled){
+            this.setState({activeFilter:true});
+            console.log("internal event");
+            this.props.toogleFilter(true);
+        }
+    }
+
+    disableFilter(evt){
+        evt.preventDefault();
+        this.setState({activeFilter:false})
+        this.props.toogleFilter(false);
+    }
+
     updateValue(evt){
         var value = evt.target.value;
         console.log(value);
         if(this.props.keytype==="number"){
-            if(value!==value+1){ //todo: regex test
+            var re = /^[+-]?\d+(\.\d+)?$/
+            if(re.test(value)){ //todo: regex test
                 this.setState({conditionValue:value});
             }
             else{
@@ -35,7 +52,7 @@ class KeyItem extends Component{
             }
         }
         else{
-            this.setState({conditionValue:null});
+            this.setState({conditionValue:value});
         }
     }
 
@@ -101,21 +118,6 @@ class KeyItem extends Component{
                 {this.state.err && <p>{this.state.err}</p>}
             </div>
         )
-    }
-
-    enableFilter(evt){
-        evt.preventDefault();      
-        if(!this.props.addDisabled){
-            this.setState({activeFilter:true});
-            console.log("internal event");
-            this.props.toogleFilter(true);
-        }
-    }
-
-    disableFilter(evt){
-        evt.preventDefault();
-        this.setState({activeFilter:false})
-        this.props.toogleFilter(false);
     }
 
     render(){

@@ -4,6 +4,7 @@ import CustomSelect from '../../common/cusomselect/CustomSelect'
 import CustomCheckbox from '../../common/customcheckbox/CustomCheckbox'
 import  { Spinner } from 'react-bootstrap';
 import ActiveFlterItem from '../activeFilterItem/ActiveFlterItem';
+import FilterListItem from '../filterListItem/FilterListItem';
 
 class Select extends Component {
     constructor(props){
@@ -23,88 +24,39 @@ class Select extends Component {
         this.getTables = this.getTables.bind(this);
         this.getTableKeys = this.getTableKeys.bind(this);
         this.getInputValue = this.getInputValue.bind(this);
-        this.renderTableNames = this.renderTableNames.bind(this);
-        this.renderSelectionMenu = this.renderSelectionMenu.bind(this);
-        this.renderHeader = this.renderHeader.bind(this);
         this.updateTables = this.updateTables.bind(this);
         this.addOrRemoveColumn = this.addOrRemoveColumn.bind(this);
+        this.getFilterItem = this.getFilterItem.bind(this);
+        this.toogleFilter = this.toogleFilter.bind(this);
+        this.deleteFilter = this.deleteFilter.bind(this);
+        this.renderHeader = this.renderHeader.bind(this);
+        this.renderTableNames = this.renderTableNames.bind(this);
+        this.renderColumnNames=this.renderColumnNames.bind(this);
         this.renderSelectionMenu = this.renderSelectionMenu.bind(this);
         this.renderActiveFilter = this.renderActiveFilter.bind(this);
-        this.handler = this.handler.bind(this);
-        this.toogleFilter = this.toogleFilter.bind(this);
-        this.filterItem = this.getFilterItem.bind(this);
+        this.renderExistedFilters = this.renderExistedFilters.bind(this);
     }
 
-    getInputValue(evt) {
-      if (evt.target.value!=="none"){
-        this.setState({targetTable:evt.target.value, err:null})
-      }
-      else {
-        this.setState({targetTable:null})
-      }
-    }
-
-    addOrRemoveColumn(evt){
-      var allcolumns = this.state.columns;
-      if (evt.target.checked){
-        allcolumns.push(evt.target.value);
-      }
-      if (!evt.target.checked){
-        allcolumns = allcolumns.filter((item) => {return item !== evt.target.value}); 
-      }
-      this.setState({columns:allcolumns});
-    }
-
-    addOrRemoveFilter(evt){
-      evt.preventDefault();
-      console.log(evt);
-      console.log("clicked");
-    }
-
-    handler()
-    {
-      console.log("extertal event");
-      this.setState({addDisabled:true});
-    }
-
-    getFilterItem(filterItem, context){
-      console.log(context.state.curFilter);
-      console.log(context.state.filters)
-      var filtername = `Filter-${context.state.curFilter}`;
-      var filters = context.state.filters;
-      filters[filtername]=filterItem;
-      context.setState({filters:filters, curFilter:context.state.curFilter+1 });
-    }
-
-    toogleFilter(value){
-      this.setState({addDisabled:value});
-    }
-
-    updateTables(){
-      this.setState({existedTables:null});
-      this.getTables();
-    }
-
-    async getTables() {
-        await fetch('http://localhost:9000/api/get_table_list').then(
-          async response => {        
-            if (!response.ok){
-                const error = response.text || response.status;
-                return Promise.reject(error);
-            }
-            const data = await response.json();
-            if (data && data.tables){ 
-              this.setState({existedTables:data.tables});
-            }
+    async getTables(){
+      await fetch('http://localhost:9000/api/get_table_list').then(
+        async response => {        
+          if (!response.ok){
+              const error = response.text || response.status;
+              return Promise.reject(error);
           }
-        ).catch(error => {
-            console.log(error)
-            this.setState({existedTables:[]});
-            console.log(`Error getting tablenames: ${error.message}`)
-        });
+          const data = await response.json();
+          if (data && data.tables){ 
+            this.setState({existedTables:data.tables});
+          }
+        }
+      ).catch(error => {
+          console.log(error)
+          this.setState({existedTables:[]});
+          console.log(`Error getting tablenames: ${error.message}`)
+      });
     }
 
-    async getTableKeys()  {
+    async getTableKeys(){
       if (!this.state.targetTable){
         this.setState({err:"Please, select table"});
       }
@@ -129,7 +81,47 @@ class Select extends Component {
       }
     }
 
-    renderHeader() {
+    getInputValue(evt) {
+      if (evt.target.value!=="none"){
+        this.setState({targetTable:evt.target.value, err:null})
+      }
+      else {
+        this.setState({targetTable:null})
+      }
+    }
+
+    updateTables(){
+      this.setState({existedTables:null});
+      this.getTables();
+    }
+ 
+    addOrRemoveColumn(evt){
+      var allcolumns = this.state.columns;
+      if (evt.target.checked){
+        allcolumns.push(evt.target.value);
+      }
+      if (!evt.target.checked){
+        allcolumns = allcolumns.filter((item) => {return item !== evt.target.value}); 
+      }
+      this.setState({columns:allcolumns});
+    }
+
+    getFilterItem(filterItem, context){
+      filterItem.filtername=`Filter-${context.state.curFilter}`;
+      context.setState({filters:context.state.filters.concat(filterItem), curFilter:context.state.curFilter+1 });
+    }
+
+    toogleFilter(value){
+      this.setState({addDisabled:value});
+    }
+    
+    deleteFilter(evt, filtername){
+      evt.preventDefault();
+      var filters = this.state.filters.filter((item)=>{return item.filtername!==filtername});
+      this.setState({filters:filters});
+    }
+
+    renderHeader(){
         return(
             <div className="Header">
               <p>Select table:</p>
@@ -144,7 +136,7 @@ class Select extends Component {
         )
     }
 
-    renderTableNames() {
+    renderTableNames(){
         if (!this.state.existedTables){
           this.getTables();
         }
@@ -160,20 +152,6 @@ class Select extends Component {
         )
     }
 
-    renderActiveFilter(item){
-      return(
-        <ActiveFlterItem
-          key={`${item.keyname}-select`}
-          name={item.keyname}
-          addDisabled={this.state.addDisabled}
-          keytype={item.keytype}
-          toogleFilter={this.toogleFilter}
-          getFilterItem={this.getFilterItem}
-          context={this}
-        />
-      );
-    }
-
     renderColumnNames(){
       return(
         <div className="KeysContainer">
@@ -186,6 +164,7 @@ class Select extends Component {
                   name={`${item.keyname}(${item.keytype})`}
                   onCheckboxChange={this.addOrRemoveColumn}
                 />
+                {this.renderExistedFilters(item.keyname)}
                 {this.renderActiveFilter(item)}
               </div>)}) 
             : this.renderErr(this.state.err)
@@ -200,6 +179,37 @@ class Select extends Component {
           {this.renderColumnNames()}
         </div>
       )
+    }
+
+    renderExistedFilters(name){
+      var filters = this.state.filters.filter((item)=>{return item.columnpath===name})
+      return(
+        <div>
+          {filters.map(item=>{
+            return(
+              <FilterListItem 
+                key={item.filtername}
+                item={item}
+                onDeleteItem={this.deleteFilter}
+              />
+            )
+          })}
+        </div>
+      )
+    }
+
+    renderActiveFilter(item){
+      return(
+        <ActiveFlterItem
+          key={`${item.keyname}-select`}
+          name={item.keyname}
+          addDisabled={this.state.addDisabled}
+          keytype={item.keytype}
+          toogleFilter={this.toogleFilter}
+          getFilterItem={this.getFilterItem}
+          context={this}
+        />
+      );
     }
     
     renderErr(err){
