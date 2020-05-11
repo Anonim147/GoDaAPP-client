@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import './Select.css'
 import CustomSelect from '../../common/cusomselect/CustomSelect'
+import CustomCheckbox from '../../common/customcheckbox/CustomCheckbox'
 import  { Spinner } from 'react-bootstrap';
-import KeyItem from '../keyitem/KeyItem';
+import ActiveFlterItem from '../activeFilterItem/ActiveFlterItem';
 
 class Select extends Component {
     constructor(props){
@@ -14,16 +15,24 @@ class Select extends Component {
           err: null,
           colErr: null,
           columns: [],
-          filters: []
+          filters: [],
+          curFilter:0,
+          addDisabled: false
         };
 
         this.getTables = this.getTables.bind(this);
         this.getTableKeys = this.getTableKeys.bind(this);
         this.getInputValue = this.getInputValue.bind(this);
         this.renderTableNames = this.renderTableNames.bind(this);
+        this.renderSelectionMenu = this.renderSelectionMenu.bind(this);
         this.renderHeader = this.renderHeader.bind(this);
         this.updateTables = this.updateTables.bind(this);
         this.addOrRemoveColumn = this.addOrRemoveColumn.bind(this);
+        this.renderSelectionMenu = this.renderSelectionMenu.bind(this);
+        this.renderActiveFilter = this.renderActiveFilter.bind(this);
+        this.handler = this.handler.bind(this);
+        this.toogleFilter = this.toogleFilter.bind(this);
+        this.filterItem = this.getFilterItem.bind(this);
     }
 
     getInputValue(evt) {
@@ -44,6 +53,31 @@ class Select extends Component {
         allcolumns = allcolumns.filter((item) => {return item !== evt.target.value}); 
       }
       this.setState({columns:allcolumns});
+    }
+
+    addOrRemoveFilter(evt){
+      evt.preventDefault();
+      console.log(evt);
+      console.log("clicked");
+    }
+
+    handler()
+    {
+      console.log("extertal event");
+      this.setState({addDisabled:true});
+    }
+
+    getFilterItem(filterItem, context){
+      console.log(context.state.curFilter);
+      console.log(context.state.filters)
+      var filtername = `Filter-${context.state.curFilter}`;
+      var filters = context.state.filters;
+      filters[filtername]=filterItem;
+      context.setState({filters:filters, curFilter:context.state.curFilter+1 });
+    }
+
+    toogleFilter(value){
+      this.setState({addDisabled:value});
     }
 
     updateTables(){
@@ -126,26 +160,44 @@ class Select extends Component {
         )
     }
 
-    renderSelectionMenu(){
+    renderActiveFilter(item){
+      return(
+        <ActiveFlterItem
+          key={`${item.keyname}-select`}
+          name={item.keyname}
+          addDisabled={this.state.addDisabled}
+          keytype={item.keytype}
+          toogleFilter={this.toogleFilter}
+          getFilterItem={this.getFilterItem}
+          context={this}
+        />
+      );
+    }
+
+    renderColumnNames(){
       return(
         <div className="KeysContainer">
           { this.state.tableKeys 
             ? this.state.tableKeys.map((item, index) => {
-                return(
-                  <KeyItem 
-                  key={index} 
-                  keyname={item.keyname}
-                  keytype={item.keytype}
-                  activeFilter={false}
-                  onCheckbox={this.addOrRemoveColumn}
-                  onFilterChange={this.addOrRemoveColumn}
-                  onValueChange={this.addOrRemoveColumn}
-                  onToogleFilter={this.addOrRemoveColumn}
-                  onChangeLogicalType={this.addOrRemoveColumn}
-                  />
-                  )})
+              return(
+              <div key={index}>
+                <CustomCheckbox
+                  key={item.keyname}
+                  name={`${item.keyname}(${item.keytype})`}
+                  onCheckboxChange={this.addOrRemoveColumn}
+                />
+                {this.renderActiveFilter(item)}
+              </div>)}) 
             : this.renderErr(this.state.err)
           }
+        </div>
+      )
+    }
+
+    renderSelectionMenu(){
+      return(
+        <div>
+          {this.renderColumnNames()}
         </div>
       )
     }

@@ -10,7 +10,7 @@ class CustomCheckbox extends Component{
                 type="checkbox" 
                 value={this.props.itemkey} 
                 name={this.props.name}
-                onChange={this.props.handler}
+                onChange={this.props.onCheckboxChange}
             />
             <label htmlFor="checkbox">{this.props.name}</label>
             </div>
