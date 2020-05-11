@@ -158,14 +158,16 @@ class Select extends Component {
           { this.state.tableKeys 
             ? this.state.tableKeys.map((item, index) => {
               return(
-              <div key={index}>
+              <div key={index} className="ColumnContainer"> 
                 <CustomCheckbox
                   key={item.keyname}
                   name={`${item.keyname}(${item.keytype})`}
                   onCheckboxChange={this.addOrRemoveColumn}
                 />
-                {this.renderExistedFilters(item.keyname)}
-                {this.renderActiveFilter(item)}
+                <div>
+                  {this.renderExistedFilters(item.keyname)}
+                  {this.renderActiveFilter(item)}
+                </div>
               </div>)}) 
             : this.renderErr(this.state.err)
           }

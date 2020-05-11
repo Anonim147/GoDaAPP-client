@@ -4,7 +4,7 @@ import './CustomCheckbox.css'
 class CustomCheckbox extends Component{
     render(){
         return(
-            <div>
+            <div className="CustomCheckboxContainer">
             <input 
                 className="CustomCheckbox"
                 type="checkbox" 

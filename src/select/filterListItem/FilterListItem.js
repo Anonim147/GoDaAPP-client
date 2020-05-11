@@ -7,10 +7,11 @@ class FilterListItem extends Component{
     render(){
         var filter = `${this.props.item.logicaltype} ${this.props.item.comparisontype} ${this.props.item.value}`
         return(
-        <p><a href='/' onClick={e=>this.props.onDeleteItem(e, this.props.item.filtername)}>
+            <div className="FilterListItem">
+            <a href='/' onClick={e=>this.props.onDeleteItem(e, this.props.item.filtername)}>
             <FontAwesomeIcon icon={faMinus} size="sm"/></a>
-            {filter}
-        </p>
+            <p>{filter}</p>
+            </div>
         )
     }
 }

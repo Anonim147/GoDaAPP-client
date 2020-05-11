@@ -11,8 +11,14 @@
     color: black;
     transition: all ease 0.3s;
     font-family: Roboto;
+    margin-right: 3px;
 }
 
 .CustomCheckbox:checked {
     background-color: black;
+}
+
+.CustomCheckboxContainer>label{
+    margin-bottom: 0px;
+    font-size: 15px;
 }

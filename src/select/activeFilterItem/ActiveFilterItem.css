@@ -1,0 +1,65 @@
+.ActiveFilterContainer>div>a{
+    color: black;
+    margin-right:4px;
+}
+
+.ActiveFilterItem{
+    display: block;
+    width: 100%;
+}
+
+.ActiveFilterItem>p{
+    font-family: Roboto;
+    font-size: 12px;
+    color: red;
+    margin-bottom: 0px;
+    margin-left: 2px;
+}
+
+.ActiveFilter{
+    display: flex;
+}
+
+.ActiveFilterElements{
+    display: flex;
+    width: 100%;
+}
+
+.ActiveFilterElements>p{
+    width: 100%;
+}
+
+.ActiveFilterElements>.CustomSelect{
+    width: 20%;
+    height: 22px;
+    margin: 0px 4px 0px 2px;
+}
+.ActiveFilterElements>input{
+    width: 50%;
+    margin: 0px 4px 0px 2px;
+}
+
+.ActiveFilterElements{
+    display: flex;
+    height: 22px;   
+    font-size: 15px;
+}
+
+.ActiveFilterElements>button{
+    width: 15%;
+    text-align: center;
+    height: 22px;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-family: Roboto;
+    font-size: 13px;
+    background-color: black;
+    color: white;
+    transition: all ease 0.5s;
+    margin: 0px 2px 0px 2px;
+}
+
+.ActiveFilterElements>button:hover{
+    color: black;
+    background-color: white;
+}

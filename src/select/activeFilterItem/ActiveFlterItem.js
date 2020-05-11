@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './ActiveFilterItem.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMinus, faPlus, faCarrot} from '@fortawesome/free-solid-svg-icons'
+import { faMinus, faPlus, faCheck} from '@fortawesome/free-solid-svg-icons'
 import CustomSelect from '../../common/cusomselect/CustomSelect'
 
 class KeyItem extends Component{
@@ -35,8 +35,9 @@ class KeyItem extends Component{
 
     disableFilter(evt){
         evt.preventDefault();
-        this.setState({activeFilter:false})
+        this.setState(this.baseState);
         this.props.toogleFilter(false);
+
     }
 
     updateValue(evt){
@@ -110,26 +111,28 @@ class KeyItem extends Component{
             break;
         }
         return(
-            <div>
+            <div className="ActiveFilterItem">
+                <div className="ActiveFilterElements">
                 <CustomSelect key={`${this.props.name}-select`} data={selectData} onChangeCallback={this.updateCondition}/> 
                 <input type="text" onChange={this.updateValue} />
                 <button onClick={this.toogleLogicalType}>{this.state.logicalType}</button>
-                <button onClick={this.getFilterItem}><FontAwesomeIcon icon={faCarrot} size="sm"/></button>
-                {this.state.err && <p>{this.state.err}</p>}
+                <button onClick={this.getFilterItem}><FontAwesomeIcon icon={faCheck} size="sm"/></button>
+                </div>
+                <p>{this.state.err}</p>
             </div>
         )
     }
 
     render(){
         return(
-            <div>
+            <div className="ActiveFilterContainer">
                 { this.state.activeFilter && 
-                    <div>
+                    <div className="ActiveFilter">
                         <a href="/" onClick={this.disableFilter}><FontAwesomeIcon icon={faMinus} size="sm"/></a>
                         {this.renderFilter()}
                     </div>}
                     <div>
-                    <a href="/" onClick={this.enableFilter}><FontAwesomeIcon icon={faPlus} size="sm"/></a>
+                        <a href="/" onClick={this.enableFilter}><FontAwesomeIcon icon={faPlus} size="sm"/></a>
                     </div> 
                   
             </div>

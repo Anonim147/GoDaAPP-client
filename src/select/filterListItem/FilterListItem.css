@@ -1,0 +1,13 @@
+.FilterListItem{
+    display: flex;
+}
+
+.FilterListItem>a{
+    color: black !important;
+    margin-right: 4px;
+}
+
+.FilterListItem>p{
+    margin-bottom: 0px;
+    font-size: 15px;
+}
