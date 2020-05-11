@@ -135,7 +135,6 @@ class Upload extends Component {
   }
 
   async insertTable(url, data) { 
-    console.log(data)
     this.setState({importing:true});
     const requestOptions = {
       method: 'POST',

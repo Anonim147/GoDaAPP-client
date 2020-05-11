@@ -18,11 +18,13 @@ class Select extends Component {
           columns: [],
           filters: [],
           curFilter:0,
-          addDisabled: false
+          addDisabled: false,
+          selectData: null
         };
 
         this.getTables = this.getTables.bind(this);
         this.getTableKeys = this.getTableKeys.bind(this);
+        this.getSelectData = this.getSelectData.bind(this);
         this.getInputValue = this.getInputValue.bind(this);
         this.updateTables = this.updateTables.bind(this);
         this.addOrRemoveColumn = this.addOrRemoveColumn.bind(this);
@@ -79,6 +81,40 @@ class Select extends Component {
             this.setState({tableKeys:null, colErr:error.message})
         });
       }
+    }
+
+    async getSelectData(){
+
+      var url='http://localhost:9000/api/get_data&limit=10&offset=0'
+      var requestObj = {
+        tablename: this.state.targetTable,
+        columns: this.state.columns,
+        conditions: this.state.filters.map(item=>{return {
+                        columnpath:item.columnpath, 
+                        logicaltype:item.logicaltype, 
+                        comparisontype:item.comparisontype, 
+                        value:item.value
+                      }})
+      };
+
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestObj)
+      };
+
+      await fetch(url, requestOptions)
+          .then(async response => {
+              if (!response.ok) {
+                  const error = response.text || response.status;
+                  return Promise.reject(error);
+              }
+              const respData = await response.json();
+              console.log(respData)
+          })
+          .catch(error => {
+              console.error('There was an error!', error.message);
+          });
     }
 
     getInputValue(evt) {
@@ -156,11 +192,13 @@ class Select extends Component {
       return(
         <div className="KeysContainer">
           { this.state.tableKeys 
-            ? this.state.tableKeys.map((item, index) => {
+            ? <div>
+              {this.state.tableKeys.map((item, index) => {
               return(
               <div key={index} className="ColumnContainer"> 
                 <CustomCheckbox
                   key={item.keyname}
+                  itemkey={item.keyname}
                   name={`${item.keyname}(${item.keytype})`}
                   onCheckboxChange={this.addOrRemoveColumn}
                 />
@@ -168,7 +206,9 @@ class Select extends Component {
                   {this.renderExistedFilters(item.keyname)}
                   {this.renderActiveFilter(item)}
                 </div>
-              </div>)}) 
+              </div>)})}
+              <button className="GetSelectDataButton" onClick={this.getSelectData}>Get Data</button>
+              </div> 
             : this.renderErr(this.state.err)
           }
         </div>
