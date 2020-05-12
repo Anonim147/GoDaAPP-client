@@ -5,22 +5,34 @@ import CustomCheckbox from '../../common/customcheckbox/CustomCheckbox'
 import  { Spinner } from 'react-bootstrap';
 import ActiveFlterItem from '../activeFilterItem/ActiveFlterItem';
 import FilterListItem from '../filterListItem/FilterListItem';
+import CustomTable from '../customtable/CustomTable';
 
 class Select extends Component {
     constructor(props){
         super(props);
+
+        this.viewstatus = {
+          EMPTY : 0,
+          LOADING : 1,
+          KEYSVIEW : 2,
+          TABLEVIEW : 3,
+          ERROR : 4
+        }
+
         this.state = {
           existedTables: null,
           targetTable: null,
           tableKeys:null,
           err: null,
-          colErr: null,
           columns: [],
           filters: [],
           curFilter:0,
           addDisabled: false,
-          selectData: null
+          selectData: null,
+          viewStatus: this.viewstatus.EMPTY
         };
+
+        this.baseState = this.state;
 
         this.getTables = this.getTables.bind(this);
         this.getTableKeys = this.getTableKeys.bind(this);
@@ -37,6 +49,12 @@ class Select extends Component {
         this.renderSelectionMenu = this.renderSelectionMenu.bind(this);
         this.renderActiveFilter = this.renderActiveFilter.bind(this);
         this.renderExistedFilters = this.renderExistedFilters.bind(this);
+        this.renderSelect = this.renderSelect.bind(this);
+        this.resetAll = this.resetAll.bind(this);
+    }
+
+    resetAll(){
+      this.setState(this.baseState);
     }
 
     async getTables(){
@@ -48,13 +66,11 @@ class Select extends Component {
           }
           const data = await response.json();
           if (data && data.tables){ 
-            this.setState({existedTables:data.tables});
+            this.setState({existedTables:data.tables, err: null, viewStatus: this.viewstatus.EMPTY});
           }
         }
       ).catch(error => {
-          console.log(error)
-          this.setState({existedTables:[]});
-          console.log(`Error getting tablenames: ${error.message}`)
+          this.setState({existedTables:[], err:error.toString(), viewStatus: this.viewstatus.ERROR});
       });
     }
 
@@ -63,6 +79,7 @@ class Select extends Component {
         this.setState({err:"Please, select table"});
       }
       else {
+        this.setState({viewStatus: this.viewstatus.LOADING, columns:[]});
         await fetch(`http://localhost:9000/api/get_columns/${this.state.targetTable}`).then(
           async response => {
             if (!response.ok){
@@ -73,18 +90,19 @@ class Select extends Component {
             const data = await response.json();
             console.log(data);
             if(data && data.value) {
-              this.setState({tableKeys:data.value});
+              this.setState({tableKeys:data.value, viewStatus: this.viewstatus.KEYSVIEW});
             }
           }
         ).catch(error => {
             console.log(error);
-            this.setState({tableKeys:null, colErr:error.message})
+            this.setState({tableKeys:null, err:error.toString(), viewStatus: this.viewstatus.ERROR})
         });
       }
     }
 
     async getSelectData(){
-
+      if(this.state.columns.length >0 ){
+      this.setState({viewStatus:this.viewstatus.LOADING});
       var url='http://localhost:9000/api/get_data&limit=10&offset=0'
       var requestObj = {
         tablename: this.state.targetTable,
@@ -110,11 +128,14 @@ class Select extends Component {
                   return Promise.reject(error);
               }
               const respData = await response.json();
-              console.log(respData)
+              console.log(respData);
+              this.setState({selectData:respData, viewStatus:this.viewstatus.TABLEVIEW});
           })
           .catch(error => {
               console.error('There was an error!', error.message);
+              this.setState({selectData:null,err:error.toString(), viewStatus:this.viewstatus.ERROR})
           });
+        }
     }
 
     getInputValue(evt) {
@@ -159,13 +180,13 @@ class Select extends Component {
 
     renderHeader(){
         return(
-            <div className="Header">
+            <div className="SelectSectionHeader">
               <p>Select table:</p>
               <div>
                 {this.renderTableNames()}
               <div>
                 <button className="ColumnButton" disabled={!this.state.existedTables} onClick={this.getTableKeys}>Get columns!</button>
-                <button className="ColumnButton" disabled={!this.state.existedTables} onClick={this.updateTables}>Reload Tables!</button>
+                <button className="ColumnButton" disabled={!this.state.existedTables} onClick={this.resetAll}>Reset</button>
               </div>
               </div>
             </div>
@@ -191,8 +212,7 @@ class Select extends Component {
     renderColumnNames(){
       return(
         <div className="KeysContainer">
-          { this.state.tableKeys 
-            ? <div>
+          { <div>
               {this.state.tableKeys.map((item, index) => {
               return(
               <div key={index} className="ColumnContainer"> 
@@ -208,17 +228,19 @@ class Select extends Component {
                 </div>
               </div>)})}
               <button className="GetSelectDataButton" onClick={this.getSelectData}>Get Data</button>
-              </div> 
-            : this.renderErr(this.state.err)
+            </div> 
           }
         </div>
       )
     }
 
     renderSelectionMenu(){
-      return(
-        <div>
-          {this.renderColumnNames()}
+      return( 
+        <div className="SelectSectionContent">
+          {this.state.viewStatus === this.viewstatus.LOADING && <div className="SelectLoading"><Spinner animation="border"/></div>}
+          {this.state.viewStatus === this.viewstatus.KEYSVIEW && <div>{this.renderColumnNames()}</div>}
+          {this.state.viewStatus === this.viewstatus.TABLEVIEW && <div>{this.renderSelect()}</div>}
+          {this.state.viewStatus === this.viewstatus.ERROR && <div>{this.renderErr()}</div>}
         </div>
       )
     }
@@ -254,15 +276,25 @@ class Select extends Component {
       );
     }
     
-    renderErr(err){
-    return(<p className="Error">{err}</p>)
+    renderErr(){
+      return(<p className="SelectSectionError">{this.state.err}</p>)
+    }
+
+    renderSelect(){
+      return(
+        <CustomTable
+          headers={this.state.columns}
+          data={this.state.selectData.data}
+          pagination={this.state.selectData.pagination} 
+        />
+      )
     }
 
     render(){
         return(
             <div>
                 {this.renderHeader()}
-                { this.state.err ? this.renderErr(this.state.err) : this.renderSelectionMenu()}
+                {this.renderSelectionMenu()}
             </div>
         );
     }

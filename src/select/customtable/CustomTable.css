@@ -1,0 +1,42 @@
+.CustomTableContainer{
+    width: 96%;
+    margin: 0% 2% 0% 2%;
+}
+
+.CustomTableContainer>div>table>thead>tr>th{
+    font-weight: normal !important;
+    text-transform:uppercase;
+}
+
+.CustomTableContainer>div>table>tbody>tr>th{
+    font-weight: normal !important;
+}
+
+.CustomTableNavButtonsContainer{
+    width: 100%;
+    display: flex;
+}
+
+.CustomTableNavButtonsContainer>button{
+    height: 30px;
+    width: 49%;
+    margin: 0% 0.5% 0% 0.5%;
+    font-family: Roboto;
+    border-radius: 2px;
+    border: 2px solid black;
+    color: white;
+    font-size: 16px;
+    background-color: black;
+    transition: all ease 0.5s;
+}
+
+.CustomTableNavButtonsContainer>button:hover{
+    color: black;
+    background-color: white;
+}
+
+.CustomTableNavButtonsContainer>button:disabled{
+    border-color: grey;
+    background-color: grey;
+    color: black;
+}

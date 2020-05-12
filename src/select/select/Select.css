@@ -1,14 +1,15 @@
-.Header>p{
+.SelectSectionHeader>p{
     text-align: center;
     margin: 2px;
 }
 
-.Header>div{
+.SelectSectionHeader>div{
     flex: 0 1 100%;
     display: flex;
     justify-content: center;
 }
-.Header>div>div{
+
+.SelectSectionHeader>div>div{
     flex: 0 1 100%;
     flex-grow: 1;
     padding: 0 2% 0% 2%;
@@ -18,7 +19,21 @@
     width: 100%;
 }
 
-.Error{
+.SelectSectionContent{
+    padding-top: 5px;
+}
+
+.SelectLoading{
+    display: flex;
+    justify-content: center;
+}
+
+.SelectLoading>.spinner-border{
+    width: 130px;
+    height: 130px;
+}
+
+.SelectSectionError{
     text-align: center;
     color: red;
     font-family: Roboto;
@@ -57,7 +72,7 @@
     width: 23px;
 }
 
-.KeysContainer {
+.KeysContainer{
     display: flex;
     padding: 1%;
     flex-direction: column;
