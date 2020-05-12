@@ -28,7 +28,6 @@ class KeyItem extends Component{
         evt.preventDefault();      
         if(!this.props.addDisabled){
             this.setState({activeFilter:true});
-            console.log("internal event");
             this.props.toogleFilter(true);
         }
     }
@@ -42,7 +41,6 @@ class KeyItem extends Component{
 
     updateValue(evt){
         var value = evt.target.value;
-        console.log(value);
         if(this.props.keytype==="number"){
             var re = /^[+-]?\d+(\.\d+)?$/
             if(re.test(value)){ //todo: regex test

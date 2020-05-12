@@ -86,15 +86,12 @@ class Select extends Component {
               const error = response.text || response.status;
               return Promise.reject(error);
             }
-            console.log(response);
             const data = await response.json();
-            console.log(data);
             if(data && data.value) {
               this.setState({tableKeys:data.value, viewStatus: this.viewstatus.KEYSVIEW});
             }
           }
         ).catch(error => {
-            console.log(error);
             this.setState({tableKeys:null, err:error.toString(), viewStatus: this.viewstatus.ERROR})
         });
       }
@@ -128,11 +125,9 @@ class Select extends Component {
                   return Promise.reject(error);
               }
               const respData = await response.json();
-              console.log(respData);
               this.setState({selectData:respData, viewStatus:this.viewstatus.TABLEVIEW});
           })
           .catch(error => {
-              console.error('There was an error!', error.message);
               this.setState({selectData:null,err:error.toString(), viewStatus:this.viewstatus.ERROR})
           });
         }

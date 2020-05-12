@@ -149,11 +149,9 @@ class Upload extends Component {
               }
               const respData = await response.json();
               this.setState({importing: false, importStatus:respData.value, importFinished: true, successfullImport: respData.success })
-              console.log("good \n" + respData)
           })
           .catch(error => {
               this.setState({importing: false, importStatus:error.message, importFinished:true, successfullImport: false})
-              console.error('There was an error!', error.message);
           });
   }
   
