@@ -207,16 +207,18 @@ class Select extends Component {
     renderColumnNames(){
       return(
         <div className="KeysContainer">
-          { <div>
+           <div>
               {this.state.tableKeys.map((item, index) => {
               return(
               <div key={index} className="ColumnContainer"> 
-                <CustomCheckbox
+                { item.keytype === "number" || item.keytype === "string" ?
+                  <CustomCheckbox
                   key={item.keyname}
                   itemkey={item.keyname}
-                  name={`${item.keyname}(${item.keytype})`}
+                  name={item.keyname}
                   onCheckboxChange={this.addOrRemoveColumn}
                 />
+                :<div className="ContainerWithoutCheckbox"><p>{item.keyname}</p></div>}
                 <div>
                   {this.renderExistedFilters(item.keyname)}
                   {this.renderActiveFilter(item)}
@@ -224,7 +226,6 @@ class Select extends Component {
               </div>)})}
               <button className="GetSelectDataButton" onClick={this.getSelectData}>Get Data</button>
             </div> 
-          }
         </div>
       )
     }

@@ -91,6 +91,11 @@
     width: 50%;
 }
 
+.ContainerWithoutCheckbox>p{
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+
 .GetSelectDataButton{
     width: 100%;
     color: white;

@@ -104,6 +104,9 @@ class KeyItem extends Component{
             case "array":
                 selectData = ['like'];
             break;
+            case "object":
+                selectData = [] //TO DO :have keys condition
+                break;
             default:
                 selectData = ['=', 'like'];
             break;
