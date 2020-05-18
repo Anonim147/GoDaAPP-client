@@ -99,7 +99,7 @@ class KeyItem extends Component{
         var selectData;
         switch(this.props.keytype){
             case "number":
-                selectData = ['=', '>', '>=', '<', '<='];
+                selectData = ['=', '>', '>=', '<', '<=', '!='];
             break;
             case "array":
                 selectData = ['like'];

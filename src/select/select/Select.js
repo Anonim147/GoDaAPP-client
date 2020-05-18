@@ -79,7 +79,7 @@ class Select extends Component {
         this.setState({err:"Please, select table"});
       }
       else {
-        this.setState({viewStatus: this.viewstatus.LOADING, columns:[]});
+        this.setState({filters:[], viewStatus: this.viewstatus.LOADING, columns:[]});
         await fetch(`http://localhost:9000/api/get_columns/${this.state.targetTable}`).then(
           async response => {
             if (!response.ok){
@@ -224,7 +224,7 @@ class Select extends Component {
                   {this.renderActiveFilter(item)}
                 </div>
               </div>)})}
-              <button className="GetSelectDataButton" onClick={this.getSelectData}>Get Data</button>
+              <button className="GetSelectDataButton" onClick={this.getSelectData} disabled={!this.state.columns || this.state.columns.length<1}>Get Data</button>
             </div> 
         </div>
       )

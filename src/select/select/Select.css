@@ -110,3 +110,8 @@
     color: black;
     background-color: white;
 }
+
+.GetSelectDataButton:disabled{
+    background-color: grey;
+    border-color: grey;
+}
