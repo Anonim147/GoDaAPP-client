@@ -102,10 +102,10 @@ class KeyItem extends Component{
                 selectData = ['=', '>', '>=', '<', '<=', '!='];
             break;
             case "array":
-                selectData = ['like'];
+                selectData = [];
             break;
             case "object":
-                selectData = [] //TO DO :have keys condition
+                selectData = ['have']
                 break;
             default:
                 selectData = ['=', 'like'];

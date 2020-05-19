@@ -34,6 +34,8 @@ class Select extends Component {
 
         this.baseState = this.state;
 
+        this.getNextData = this.getNextData.bind(this);
+        this.getPrevData = this.getPrevData.bind(this);
         this.getTables = this.getTables.bind(this);
         this.getTableKeys = this.getTableKeys.bind(this);
         this.getSelectData = this.getSelectData.bind(this);
@@ -57,6 +59,24 @@ class Select extends Component {
       this.setState(this.baseState);
     }
 
+    transformKeys(data){
+      var transofrmedKeys = []
+      data.forEach((item, index) => {
+          var re = /\.\[\]$/
+          if(!re.test(item.keyname))
+          {
+            if(data[index+1] && data[index+1].keyname === `${item.keyname}.[]`)
+            {
+                transofrmedKeys.push({keyname: `${item.keyname}.[]`, keytype:"array"})
+            }
+            else(
+                transofrmedKeys.push(item)
+            )
+          }
+      });
+      return transofrmedKeys
+  }
+
     async getTables(){
       await fetch('http://localhost:9000/api/get_table_list').then(
         async response => {        
@@ -79,7 +99,7 @@ class Select extends Component {
         this.setState({err:"Please, select table"});
       }
       else {
-        this.setState({filters:[], viewStatus: this.viewstatus.LOADING, columns:[]});
+        this.setState({filters:[], viewStatus: this.viewstatus.LOADING, columns:[], addDisabled:false});
         await fetch(`http://localhost:9000/api/get_columns/${this.state.targetTable}`).then(
           async response => {
             if (!response.ok){
@@ -88,7 +108,7 @@ class Select extends Component {
             }
             const data = await response.json();
             if(data && data.value) {
-              this.setState({tableKeys:data.value, viewStatus: this.viewstatus.KEYSVIEW});
+              this.setState({tableKeys:this.transformKeys(data.value), viewStatus: this.viewstatus.KEYSVIEW});
             }
           }
         ).catch(error => {
@@ -97,10 +117,25 @@ class Select extends Component {
       }
     }
 
-    async getSelectData(){
+    async getNextData(evt){
+      if (this.state.selectData){
+        this.getSelectData(evt, this.state.selectData.pagination.next_link)
+      }
+    }
+
+    async getPrevData(evt)
+    {
+      if (this.state.selectData){
+        this.getSelectData(evt, this.state.selectData.pagination.prev_link)
+      }
+    }
+
+    async getSelectData(evt, url){
       if(this.state.columns.length >0 ){
       this.setState({viewStatus:this.viewstatus.LOADING});
-      var url='http://localhost:9000/api/get_data&limit=10&offset=0'
+      if (!url){
+        url='http://localhost:9000/api/get_data&limit=10&offset=0'
+      }
       var requestObj = {
         tablename: this.state.targetTable,
         columns: this.state.columns,
@@ -282,6 +317,8 @@ class Select extends Component {
           headers={this.state.columns}
           data={this.state.selectData.data}
           pagination={this.state.selectData.pagination} 
+          getPrevData={this.getPrevData}
+          getNextData={this.getNextData}
         />
       )
     }

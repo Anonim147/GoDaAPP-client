@@ -37,8 +37,8 @@ class CustomTable extends Component{
     renderNavs(){
         return(
             <div className="CustomTableNavButtonsContainer">
-                <button disabled={this.props.pagination.prev_link===""} onClick={this.props.GetPrevData}>Prev</button>
-                <button disabled={this.props.pagination.next_link===""} onClick={this.props.GetNextData}>Next</button>
+                <button disabled={this.props.pagination.prev_link===""} onClick={this.props.getPrevData}>Prev</button>
+                <button disabled={this.props.pagination.next_link===""} onClick={this.props.getNextData}>Next</button>
             </div>
         )
     }
