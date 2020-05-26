@@ -125,7 +125,7 @@
 
   .Filename {
     text-overflow: clip;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-size: 16px;
     color: rgb(59, 59, 59);
     text-align: center;
@@ -133,25 +133,6 @@
 
   .ButtonContainer{
     width: 100%;
-  }
-
-  .TabButton {
-    font-family: Roboto;
-    width: 46%;
-    border-radius: 1px;
-    margin: 1%;
-    color: black;
-    border: 2px solid black;
-    background-color: white;
-    -webkit-transition: all 0.5s ease;;
-    -moz-transition: all 0.5s ease;;
-    -o-transition: all 0.5s ease;;
-    transition: all 0.5s ease;
-  }
-
-  .TabButton.active{
-    color: white;
-    background-color: black;
   }
 
   .InputTable{
@@ -201,10 +182,6 @@
   input {
     border: 1px solid black;
     border-radius: 2px;
-  }
-
-  *:active, *:focus{
-    outline: 0;
   }
 
 

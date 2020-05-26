@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './Upload.css'
 import Dropzone from '../dropzone/Dropzone'
-import CustomSelect from '../../common/cusomselect/CustomSelect'
 import CircularProgressBar from '../circularprogress/CircularProgressBar'
 import  { Spinner } from 'react-bootstrap';
 
@@ -16,7 +15,6 @@ class Upload extends Component {
         successfullUploaded: false,
         successfullImport: false,
         tableName: null,
-        isInsert: true,
         importStatus: "Working with table.Please, wait.",
         existedTables: null,
         downloadLink: null,
@@ -29,12 +27,8 @@ class Upload extends Component {
       this.onFilesAdded = this.onFilesAdded.bind(this);
       this.uploadFile = this.uploadFile.bind(this);
       this.renderActions = this.renderActions.bind(this);
-      this.toogleButton = this.toogleButton.bind(this);
-      this.geexistedtables = this.getableNames.bind(this);
-      this.renderTableNames = this.renderTableNames.bind(this);
       this.cancelImport = this.cancelImport.bind(this);
       this.getInputValue = this.getInputValue.bind(this);
-      this.getUpdateValue = this.getUpdateValue.bind(this);
       this.startImportTable = this.startImportTable.bind(this);
       this.renderLoader = this.renderLoader.bind(this);
   }
@@ -51,13 +45,7 @@ class Upload extends Component {
           tablename:this.state.tableName,
           filepath: this.state.filepath
         });
-      if(this.state.isInsert){
         url = "http://localhost:9000/api/insert_data"
-      }
-      else
-      {
-        url = "http://localhost:9000/api/update_data"
-      }
       this.insertTable(url, data)
     }
     else if  (!this.state.tableName){
@@ -85,25 +73,6 @@ class Upload extends Component {
     }
   }
 
-  getUpdateValue(evt) {
-    if (evt.target.value !== "none"){
-      this.setState({
-        textErr:null,
-        tableName:evt.target.value
-      });
-    }
-    else {
-      this.setState({
-        textErr:"select existed database",
-        tableName:null
-      });
-    }
-  }
-
-  toogleButton() {
-    this.setState({ isInsert: !this.state.isInsert});
-  }
-
   onFilesAdded(files) {
     files ?
       this.setState(() => ({
@@ -114,24 +83,6 @@ class Upload extends Component {
         files: [],
         action: ""
     }))
-  }
-
-  async getableNames() {
-    await fetch('http://localhost:9000/api/get_table_list').then(
-      async response => {        
-        if (!response.ok){
-            const error = response.text || response.status
-            return Promise.reject(error);
-        }
-        const data = await response.json();
-        if (data && data.tables){ 
-          this.setState({existedTables:data.tables});
-        }
-      }
-    ).catch(error => {
-        this.setState({existedTables:[]});
-        console.log(`Error getting tablenames: ${error.message}`)
-    });
   }
 
   async insertTable(url, data) { 
@@ -211,21 +162,6 @@ class Upload extends Component {
         }.bind(this))
   }
 
-  renderTableNames() {
-    if (!this.state.existedTables){
-      this.getableNames();
-    }
-
-    return(
-      <div>
-      { !this.state.existedTables ? 
-        <Spinner animation="border" />
-        : <CustomSelect selectId="tableSelect" data={this.state.existedTables} onChangeCallback={this.getUpdateValue}/>
-      }
-      </div>
-    )
-  }
-
   renderProgress(file) {
     const uploadProgress = this.state.uploadProgress[file.name];
       return (
@@ -242,24 +178,12 @@ class Upload extends Component {
   renderFileNameContainer() {
     return (
       <div className="FilenameContainer">
+          <p className="Filename">Filename: </p>
           <p className="Filename">{this.state.files[0].name}</p>
-          {   this.state.isInsert ? 
               <div>
-                  <div className="ButtonContainer">
-                      <button className="TabButton active">Insert</button>
-                      <button className="TabButton unactive" onClick={this.toogleButton}>Update</button>
-                  </div>
                   <input id="inserttablename" className="InputTable" type="text" 
                     placeholder="Enter table name here" onChange={this.getInputValue}/>
-              </div> :    
-              <div>
-                  <div>
-                      <button className="TabButton unactive" onClick={this.toogleButton}>Insert</button>
-                      <button className="TabButton active" >Update</button>
-                  </div>
-                  {this.renderTableNames()}
-              </div>
-          } 
+              </div> 
             <p className="TextErr">{this.state.textErr}</p>
       </div>
     );
@@ -302,7 +226,7 @@ class Upload extends Component {
         {this.state.filepath ?
           <button className = "UploadButton"
               disabled={this.state.textErr || this.state.importing || this.state.importFinished}
-              onClick={this.startImportTable}>Import/Update</button>
+              onClick={this.startImportTable}>Import</button>
           : <button className = "UploadButton"
             disabled={this.state.files.length <= 0 || this.state.uploading}
             onClick={this.uploadFile}>

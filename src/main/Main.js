@@ -23,7 +23,7 @@ class Main extends Component {
                     <Nav.Link eventKey="select">Select Data</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="merge">Merge Data</Nav.Link>
+                    <Nav.Link eventKey="update">Update Data</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="manage">Manage Tables</Nav.Link>
@@ -38,7 +38,7 @@ class Main extends Component {
                   <Tab.Pane eventKey="select">
                     <Select />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="merge">
+                  <Tab.Pane eventKey="update">
                     <div>tab 3</div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="manage">
