@@ -25,7 +25,7 @@ class CustomTable extends Component{
                         return(
                         <tr key={`tr${index}`}>
                             {this.props.headers.map((innerItem, innerIndex)=>{
-                                return(<th key={`${index}${innerIndex}`}>{item[innerItem]}</th>)
+                                return(<th key={`${index}${innerIndex}`}>{item[innerItem].toString()}</th>)
                             })}
                         </tr>)
                     })}

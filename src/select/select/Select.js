@@ -59,24 +59,6 @@ class Select extends Component {
       this.setState(this.baseState);
     }
 
-    transformKeys(data){
-      var transofrmedKeys = []
-      data.forEach((item, index) => {
-          var re = /\.\[\]$/
-          if(!re.test(item.keyname))
-          {
-            if(data[index+1] && data[index+1].keyname === `${item.keyname}.[]`)
-            {
-                transofrmedKeys.push({keyname: `${item.keyname}.[]`, keytype:"array"})
-            }
-            else(
-                transofrmedKeys.push(item)
-            )
-          }
-      });
-      return transofrmedKeys
-  }
-
     async getTables(){
       await fetch('http://localhost:9000/api/get_table_list').then(
         async response => {        
@@ -108,7 +90,7 @@ class Select extends Component {
             }
             const data = await response.json();
             if(data && data.value) {
-              this.setState({tableKeys:this.transformKeys(data.value), viewStatus: this.viewstatus.KEYSVIEW});
+              this.setState({tableKeys:data.value, viewStatus: this.viewstatus.KEYSVIEW});
             }
           }
         ).catch(error => {
@@ -160,6 +142,7 @@ class Select extends Component {
                   return Promise.reject(error);
               }
               const respData = await response.json();
+              console.log(respData)
               this.setState({selectData:respData, viewStatus:this.viewstatus.TABLEVIEW});
           })
           .catch(error => {
@@ -246,7 +229,7 @@ class Select extends Component {
               {this.state.tableKeys.map((item, index) => {
               return(
               <div key={index} className="ColumnContainer"> 
-                { item.keytype === "number" || item.keytype === "string" ?
+                { item.keytype === "number" || item.keytype === "string" || item.keytype === "array" ?
                   <CustomCheckbox
                   key={item.keyname}
                   itemkey={item.keyname}
