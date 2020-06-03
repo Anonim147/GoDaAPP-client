@@ -1,0 +1,21 @@
+.UploadFileContainer{
+    display: flex;
+    width: 96%;
+    justify-content: center;
+    margin: 15px 0px 15px 0px;
+}
+
+.UploadFileContainer>div{
+    display: flex;
+    width: 50%;
+    justify-content: center;
+}
+
+.FileUploadButtonContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.FileUploadButtonContainer>button{
+    width: 48%;
+}  

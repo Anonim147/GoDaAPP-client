@@ -1,0 +1,29 @@
+  .circle-background,
+  .circle-progress {
+    fill: none;
+  }
+  
+  .circle-background {
+    stroke: #ddd;
+  }
+  
+  .circle-progress {
+    stroke: #000;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    -webkit-transition: all 0.7s ease;;
+    -moz-transition: all 0.7s ease;;
+    -o-transition: all 0.7s ease;;
+    transition: all 0.7s ease;
+  }
+  
+  .circle-text {
+    font-family: Roboto;
+    font-size: 3em;
+    fill: #000;
+  }
+  .circle-text-small {
+    font-family: Roboto;
+    font-size: 1.1em;
+    fill: #000;
+  }

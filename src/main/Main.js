@@ -3,6 +3,7 @@ import './Main.css'
 import Upload from '../import/upload/Upload'
 import Select from '../select/select/Select';
 import  { Tab, Row, Col, Nav } from 'react-bootstrap';
+import Update from '../update/update/Update';
 
 
 class Main extends Component {
@@ -12,7 +13,7 @@ class Main extends Component {
             <div className="header">
                 <h1>GoDAPP</h1>
             </div>
-            <Tab.Container id="left-tabs-example" defaultActiveKey="select">
+            <Tab.Container id="left-tabs-example" defaultActiveKey="update">
             <Row>
               <Col sm={3}>
                 <Nav variant="pills" className="flex-column">
@@ -39,7 +40,7 @@ class Main extends Component {
                     <Select />
                   </Tab.Pane>
                   <Tab.Pane eventKey="update">
-                    <div>tab 3</div>
+                    <Update />
                   </Tab.Pane>
                   <Tab.Pane eventKey="manage">
                     <div>tab 4</div>
