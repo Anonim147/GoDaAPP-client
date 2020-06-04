@@ -1,0 +1,44 @@
+.UpdateLinkUploadContainer{
+    margin: 10px 0px 10px 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.UpdateLinkUploadContainer>.InnerElements{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 96%;
+}
+
+.UpdateLinkUploadContainer>.InnerElements>input+div{
+    margin: 10px 10px 10px 0px;
+}
+
+.LinkUploadButtonsContainer{
+    width: 100%;
+}
+
+.LinkUploadButtonsContainer>button{
+    width: 50%;
+}
+
+#LinkUploadError{
+    text-align: center;
+    color: red;
+    font-size: 14px;
+}
+.LinkDownloadResultContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.LinkDownloadResultContainer>.spinner-border{
+    height: 200px !important;
+    width: 200px !important;
+}
+
+.DownloadResultIcon{
+    height: 200px;
+    width: 200px;
+}

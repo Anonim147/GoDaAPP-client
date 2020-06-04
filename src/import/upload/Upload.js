@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './Upload.css'
-import Dropzone from '../dropzone/Dropzone'
-import CircularProgressBar from '../circularprogress/CircularProgressBar'
+import Dropzone from '../../common/dropzone/Dropzone'
+import CircularProgressBar from '../../common/circularprogress/CircularProgressBar'
 import  { Spinner } from 'react-bootstrap';
 
 class Upload extends Component {

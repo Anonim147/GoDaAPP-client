@@ -3,6 +3,7 @@ import  { Spinner } from 'react-bootstrap';
 import './Update.css'
 import CustomSelect from '../../common/cusomselect/CustomSelect'
 import FileUpload from '../fileUpload/FileUpload';
+import LinkUpload from '../linkUpload/LinkUpload';
 
 
 class Update extends Component{
@@ -127,7 +128,7 @@ class Update extends Component{
                 </div>
                 <div className="UpdateContentContainer">
                     {this.state.tabView === this.TabView.FILE ? <FileUpload onNextStep={this.setPath}/> : ""}
-                    {this.state.tabView === this.TabView.LINK ? this.renderLinkUpdate() : ""}
+                    {this.state.tabView === this.TabView.LINK ? <LinkUpload onNextStep={this.setPath}/> : ""}
                 </div>
             </div>
         )
