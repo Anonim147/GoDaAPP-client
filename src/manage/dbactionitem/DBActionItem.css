@@ -1,0 +1,19 @@
+.DBcationItemContainer{
+    display: flex;
+    justify-content: flex-end;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin:2px;
+}
+.DBcationItemContainer>p{
+    font-family: Roboto;
+    width: 100px;
+    text-align: center;
+    margin: 0%;
+}
+
+.DBActionItemButton{
+    height: 27px;
+    width: 40px;
+    margin-left: 1px;
+}

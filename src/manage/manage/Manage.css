@@ -1,0 +1,35 @@
+.ManageContentContainer{
+    display: flex;
+    justify-content: center;
+    width: 90%;
+}
+
+.ManageContentContainer>div{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 10px 20px 10px 20px;
+}
+.ManageContentContainer>.ManageDBItemsContainer{
+    width: 40%;
+}
+.ManageContentContainer>.ManageDBInfoContainer{
+    width: 60%;
+}
+
+.ManageContentContainer>div>div{
+    width: 100%;
+}
+
+.ManageReset{
+    width: 90%;
+}
+.ManageReset>button{
+    width: 100%;
+    border-radius: 2px;
+}
+
+.ManageDBItemsContainer>.spinner-border{
+    width: 200px !important;
+    height: 200px !important;
+}

@@ -1,0 +1,21 @@
+.DBInfoContainer{
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.DBInfoIcon{
+    width: 200px;
+    height: 200px;
+}
+
+.DBInfoContainer{
+    display: flex;
+}
+
+.DBInfoContainer>.DBInfoText{
+    margin-top: 20px;
+}
+
+.DBInfoText>p{
+    margin: 0px;
+}

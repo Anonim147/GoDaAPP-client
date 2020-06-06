@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import './Main.css'
-import Upload from '../import/upload/Upload'
+import './Main.css';
+import Upload from '../import/upload/Upload';
 import Select from '../select/select/Select';
-import  { Tab, Row, Col, Nav } from 'react-bootstrap';
 import Update from '../update/update/Update';
+import Manage from '../manage/manage/Manage';
+
+import  { Tab, Row, Col, Nav } from 'react-bootstrap';
+
 
 
 class Main extends Component {
@@ -13,7 +16,7 @@ class Main extends Component {
             <div className="header">
                 <h1>GoDAPP</h1>
             </div>
-            <Tab.Container id="left-tabs-example" defaultActiveKey="update">
+            <Tab.Container id="left-tabs-example" defaultActiveKey="manage">
             <Row>
               <Col sm={3}>
                 <Nav variant="pills" className="flex-column">
@@ -43,7 +46,7 @@ class Main extends Component {
                     <Update />
                   </Tab.Pane>
                   <Tab.Pane eventKey="manage">
-                    <div>tab 4</div>
+                    <Manage />
                   </Tab.Pane>
                 </Tab.Content>
               </Col>
