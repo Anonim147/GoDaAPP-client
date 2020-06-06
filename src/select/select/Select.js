@@ -142,7 +142,6 @@ class Select extends Component {
                   return Promise.reject(error);
               }
               const respData = await response.json();
-              console.log(respData)
               this.setState({selectData:respData, viewStatus:this.viewstatus.TABLEVIEW});
           })
           .catch(error => {

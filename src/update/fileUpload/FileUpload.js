@@ -84,14 +84,12 @@ class FileUpload extends Component {
         });
         p.then(
             function(res){
-                console.log(res.value)
-  
             this.setState({ successfullUploaded: true, uploading: false, filepath: res.value});
                 //TO DO: norm handler here
             }.bind(this), function(reason){
                 this.setState({ successfullUploaded: false, uploading: false, filepath: null });
             }.bind(this))
-        }
+    }
 
     renderProgress(file){
         const uploadProgress = this.state.uploadProgress[file.name];
@@ -143,7 +141,7 @@ class FileUpload extends Component {
                 {this.state.successfullUploaded ? 
                     <button className="BlackButton" onClick={e => this.props.onNextStep(e, this.state.filepath)}>Next</button>:
                     <button className="BlackButton" disabled={ this.state.files.length <= 0 || this.state.uploading } onClick={this.uploadFile}>Upload</button>}
-                <button className="ResetBtn BlackButton" onClick={this.reset}>Cancel</button>
+                <button className="ResetBtn BlackButton" onClick={e=>{this.props.onReset(); this.reset()}}>Cancel</button>
             </div>
         )
     }

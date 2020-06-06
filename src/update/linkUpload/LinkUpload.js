@@ -25,9 +25,7 @@ class LinkUpload extends Component{
         this.setState(this.baseState);
     }
 
-    async downloadFromLink(){
-    
-        this.setState({downloading: true});
+    async downloadFromLink(){  
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -42,7 +40,6 @@ class LinkUpload extends Component{
                     return Promise.reject(error);
                 }
                 const respData = await response.json();
-                console.log(respData)
                 if(respData.success){
                     this.setState({downloading:false, done:true, sucessfullDownload:true, filepath:respData.value});
                 }
@@ -60,7 +57,6 @@ class LinkUpload extends Component{
         if(e.target.value === "")
         {  this.setState({link:"",err:null}) }
         else if(e.target.value.match(re)) {
-            console.log(e.target.value)
             this.setState({link:e.target.value,err:null})
         }
         else{this.setState({link:"",err:"Not valid url. Try again"})}
@@ -95,7 +91,7 @@ class LinkUpload extends Component{
                 {this.filepath 
                     ? <button className="BlackButton" onClick={e=> this.props.onNextStep(e, this.state.filepath)}>Next</button> 
                     : <button className="BlackButton" disabled={this.state.link==="" || this.state.downloading} onClick={this.downloadFromLink}>Download from Link</button>}
-                <button className="BlackButton" onClick={this.reset}>Cancel</button>
+                <button className="BlackButton" onClick={this.props.onReset}>Cancel</button>
             </div>
                 {this.state.err && <p id="LinkUploadError">{this.state.err}</p>}
                 {this.renderResult()}

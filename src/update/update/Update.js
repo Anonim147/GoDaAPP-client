@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
-import  { Spinner } from 'react-bootstrap';
 import './Update.css'
-import CustomSelect from '../../common/cusomselect/CustomSelect'
 import FileUpload from '../fileUpload/FileUpload';
 import LinkUpload from '../linkUpload/LinkUpload';
-
+import FieldSelect from '../fieldSelect/FieldSelect';
+import {Spinner} from 'react-bootstrap'
 
 class Update extends Component{
     constructor(props){
         super(props);
         this.state = {
             tabView:0,
-            targetTable: null,
-            existedTables: null, 
-            filepath: null
+            pageView:0,
+            filepath: null,
+            columns:[],
+            updateMethod:null,
+            updating:true,
+            success:false,
+            err:null
         };
 
         this.TabView={
@@ -21,99 +24,101 @@ class Update extends Component{
             LINK: 1
         }
 
-        this.baseState = this.state;
+        this.PageView={
+            SOURCE:0,
+            FIELDS:1,
+            UPDATE:2
+        }
 
-        this.renderTableSelect = this.renderTableSelect.bind(this);
+        this.baseState = this.state;
         this.resetAll = this.resetAll.bind(this);
         this.changeView=this.changeView.bind(this);
-        this.setPath = this.setPath.bind(this)
+        this.changeMainView = this.changeMainView.bind(this);
+        this.setNextStep = this.setNextStep.bind(this);
+        this.setAdditionalParams = this.setAdditionalParams.bind(this)
     }
 
     resetAll(){
         this.setState(this.baseState);
     }
 
-    async getTables(){
-        await fetch('http://localhost:9000/api/get_table_list').then(
-            async response => {        
-                if (!response.ok){
-                    const error = response.text || response.status;
-                    return Promise.reject(error);
-                }
-                const data = await response.json();
-                if (data && data.tables){ 
-                    this.setState({existedTables:data.tables, err: null});
-                }
-            }
-        ).catch(error => {
-            this.setState({existedTables:[], err:error.toString()});
-        });
-    }
-
     changeView(view){
         this.setState({tabView:view});
     }
 
-    setPath(evt, filepath){
-        this.setState({filepath:filepath});
+    changeMainView(view){
+        this.setState({pageView:view});
     }
 
-    renderOptions(){
-        return(
-            <div className="UpdateOptionsContainer">
-                <p>Select update method</p>
-                <CustomSelect
-                    data={["full replace", "only changed"]}
-                    onChangeCallback={this.GetUpdateMethod}
-                />
-            </div>
-        )
+    setAdditionalParams(targetTable, columns, method){
+        this.updateTable(this.state.filepath, targetTable, columns, method)
+        this.setState({
+            targetTable:targetTable, columns:columns, updateMethod:method, pageView:this.PageView.UPDATE});
+        
     }
 
-    renderLinkUpdate(){
-        return(<div>Link</div>)
-    }
-
-    renderAutoUpdate(){
-        return(<div>Auto</div>)
-    }
-
-    renderHeader(){
-        return(
-            <div className="SelectSectionHeader">
-              <p>Select table:</p>
-              <div>
-                {this.renderTableSelect()}
-              <div>
-                <button className="UpdateHeaderButton BlackButton" 
-                    disabled={!this.state.existedTables} 
-                    onClick={this.resetAll}>Reload
-                </button>
-              </div>
-              </div>
-            </div>
-        )
-    }
-
-    renderTableSelect(){
-        if (!this.state.existedTables){
-          this.getTables();
+    setNextStep(evt, filepath){
+        if(filepath){
+            this.setState({filepath:filepath, pageView:this.PageView.FIELDS});
         }
+    }
+    
+    async updateTable(filepath, tablename, columns, updateMethod){
+        const requestObj = {
+            filepath:filepath,
+            tablename:tablename,
+            columns:columns,
+            method:updateMethod
+        } 
+        console.log("sas")
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestObj)
+        };
+
+        const url = `http://localhost:9000/api/update_table`
+        await fetch(url, requestOptions)
+            .then(async response => {
+                if (!response.ok) {
+                    const error = response.text || response.status;
+                    return Promise.reject(error);
+                }
+                const respData = await response.json();
+                if(respData.success){
+                    this.setState({updating:false, success:true});
+                }
+                else{
+                    this.setState({updating:false, success:false, err:respData.value})
+                }
+            })
+            .catch(error => {
+                this.setState({updating:false, success:false, err:"Oooops!Something goes wrong..."})
+        });
+    }
+
+    renderMainContainer(){
         return(
-          <div className="SelectContainer">
-          { !this.state.existedTables ? 
-            <Spinner animation="border" />
-            : <CustomSelect selectId="TargetTableSelect"
-                data={this.state.existedTables} 
-                onChangeCallback={this.getInputValue} />
-          }
-          </div>
+            <div>
+             <div>
+                {this.state.pageView === this.PageView.SOURCE && 
+                    this.renderUploadContainer()}
+                {this.state.pageView === this.PageView.FIELDS && 
+                    <FieldSelect 
+                        onNextStep={this.setAdditionalParams}
+                        onReset={this.resetAll}
+                    />}
+                {this.state.pageView === this.PageView.UPDATE &&
+                    this.renderResult()}
+            </div>
+         </div>
         )
     }
 
-    renderUpdateContainer(){
+    renderUploadContainer(){
         return(
             <div className="UpdateContainer">
+                <p>Select source for update:</p>
                 <div className="UpdateTabsContainer">
                     <button 
                         className={this.state.tabView===this.TabView.FILE ? "UpdateTabActive" : "BlackButton"}
@@ -127,9 +132,33 @@ class Update extends Component{
                     </button>
                 </div>
                 <div className="UpdateContentContainer">
-                    {this.state.tabView === this.TabView.FILE ? <FileUpload onNextStep={this.setPath}/> : ""}
-                    {this.state.tabView === this.TabView.LINK ? <LinkUpload onNextStep={this.setPath}/> : ""}
+                    {this.state.tabView === this.TabView.FILE && <FileUpload onNextStep={this.setNextStep} onReset={this.resetAll}/>}
+                    {this.state.tabView === this.TabView.LINK && <LinkUpload onNextStep={this.setNextStep} onReset={this.resetAll}/>}
                 </div>
+            </div>
+        )
+    }
+
+    renderResult(){
+        return(
+        <div className="ProcessUpdateWrapper">
+        <div className="ProcessUpdateContent">
+            {this.state.updating 
+                ? <Spinner animation="border" /> 
+                : this.state.success
+                ? <img
+                    alt="Success"
+                    className="DownloadResultIcon"
+                    src="done.svg"
+                    /> 
+                : <img
+                    alt="Error"
+                    className="DownloadResultIcon"
+                    src="error.svg"
+                    />}
+                </div>
+            {this.state.err && <p>{this.state.err}</p>}
+            <button className="BlackButton" onClick={this.resetAll}>Reset</button>
             </div>
         )
     }
@@ -137,9 +166,7 @@ class Update extends Component{
     render(){
         return(
             <div className="UpdateWrapper">
-                {this.renderHeader()}
-                {this.renderOptions()}
-                {this.renderUpdateContainer()}
+                {this.renderMainContainer()}
             </div>
         );
     }

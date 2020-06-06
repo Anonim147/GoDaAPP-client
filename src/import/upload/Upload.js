@@ -153,8 +153,6 @@ class Upload extends Component {
   
       p.then(
         function(res){
-          console.log(res.value)
-
           this.setState({ successfullUploaded: true, uploading: false, filepath: res.value});
           //TO DO: norm handler here
         }.bind(this), function(reason){
