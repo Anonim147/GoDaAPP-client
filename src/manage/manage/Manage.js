@@ -81,7 +81,7 @@ class Manage extends Component{
     }
 
     renderDBItems(){
-        if (this.state.existedTables.length<1){
+        if (this.state.existedTables.length<1 && !this.state.err){
             this.getTables();
         }
         return(
@@ -116,6 +116,7 @@ class Manage extends Component{
             <div className="ManageReset">
                 <button className="BlackButton"  onClick={this.resetAll}>Reload</button>
             </div>
+            <p id="ManageErr">{this.state.err}</p>
         </div>
         )
     }

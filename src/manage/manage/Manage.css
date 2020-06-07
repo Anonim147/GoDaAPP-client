@@ -33,3 +33,10 @@
     width: 200px !important;
     height: 200px !important;
 }
+
+#ManageErr{
+    color: red;
+    font-size: 13px;
+    text-align: center;
+    width: 90%;
+}
