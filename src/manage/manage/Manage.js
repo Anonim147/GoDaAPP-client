@@ -11,12 +11,15 @@ class Manage extends Component{
 
         this.state = {
             existedTables:[],
-            dbInfo:null
+            dbInfo:null,
+            err: null
         }
 
         this.baseState = this.state;
 
         this.resetAll = this.resetAll.bind(this);
+        this.onInfoClick = this.onInfoClick.bind(this);
+        this.onDropClick = this.onDropClick.bind(this);
     }
 
     resetAll(){
@@ -40,8 +43,41 @@ class Manage extends Component{
         });
     }
 
-    onDropClick(evt, tableName){
-        console.log(tableName);
+    async onInfoClick(evt, tablename) {
+        await fetch(`http://localhost:9000/api/get_table_info/${tablename}`).then(
+          async response => {
+            if (!response.ok){
+              const error = response.text || response.status;
+              return Promise.reject(error);
+            }
+            const data = await response.json();
+            if(data && data.value) {
+              this.setState({dbInfo:data.value});
+            }
+          }
+        ).catch(error => {
+            this.setState({dbInfo:null, err:error.toString()})
+        });
+    }
+
+    async onDropClick(evt, tablename){
+        const requestOptions = {
+            method:'DELETE'
+        }
+        await fetch(`http://localhost:9000/api/drop_table/${tablename}`, requestOptions).then(
+          async response => {
+            if (!response.ok){
+              const error = response.text || response.status;
+              return Promise.reject(error);
+            }
+            const data = await response.json();
+            if(data && data.value) {
+              await this.getTables()
+            }
+          }
+        ).catch(error => {
+            this.setState({err:error.toString()})
+        });
     }
 
     renderDBItems(){
@@ -54,7 +90,7 @@ class Manage extends Component{
                 ? <Spinner animation="border" />
                 : this.state.existedTables.map((item)=>{
                         return(
-                            <DBActionItem key={item} name={item} onDrop={this.onDropClick} onInfo={this.onDropClick}/>
+                            <DBActionItem key={item} name={item} onDrop={this.onDropClick} onInfo={this.onInfoClick}/>
                         )
                     })
                 }
@@ -65,7 +101,7 @@ class Manage extends Component{
     renderDBInfo(){
         return(
             <div className="ManageDBInfoContainer">
-                <DBInfoItem dbItem={this.state.dbInfo}/>
+                <DBInfoItem dbItem={this.state.dbInfo} onInfo={this.onInfoClick}/>
             </div>
         )
     }

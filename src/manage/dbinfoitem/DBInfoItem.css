@@ -4,7 +4,6 @@
 }
 
 .DBInfoIcon{
-    width: 200px;
     height: 200px;
 }
 
@@ -18,4 +17,6 @@
 
 .DBInfoText>p{
     margin: 0px;
+    font-family: Roboto;
+    text-transform: uppercase;
 }
